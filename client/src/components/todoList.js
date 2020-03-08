@@ -1,22 +1,23 @@
 import React, { Component } from "react";
 import { Container, Button, ListGroup, ListGroupItem } from "reactstrap";
+import PropTypes from "prop-types";
+
+import { connect } from "react-redux";
+import { getTodos, deleteTodo, addTodo } from "../actions/todoActions";
 
 class TodoList extends Component {
-  state = {
-    todos: [
-      { id: 1, name: "Work" },
-      { id: 2, name: "Play" },
-      { id: 3, name: "Job" },
-      { id: 4, name: "Money" }
-    ]
-  };
+  componentDidMount() {
+    this.props.getTodos();
+  }
 
   render() {
-    const { todos } = this.state;
+    const { todo } = this.props.todo;
 
+    {
+      console.log(this.props.todo.todo.length);
+    }
     return (
       <Container>
-        {console.log(todos.length)}
         <Button
           color="dark"
           className="mtb"
@@ -24,7 +25,7 @@ class TodoList extends Component {
             const name = prompt("Enter the Todo");
             if (name) {
               this.setState(state => ({
-                todos: [...state.todos, { id: todos.length + 1, name }]
+                todo: [...state.todo, { id: todo.length + 1, name }]
               }));
             }
           }}
@@ -33,7 +34,7 @@ class TodoList extends Component {
         </Button>
 
         <ListGroup>
-          {todos.map(({ id, name }) => (
+          {todo.map(({ id, name }) => (
             <ListGroupItem>
               <Button
                 className="remove-btn"
@@ -41,7 +42,7 @@ class TodoList extends Component {
                 size="sm"
                 onClick={() => {
                   this.setState(state => ({
-                    todos: todos.filter(todo => todo.id !== id)
+                    todo: todo.filter(todo => todo.id !== id)
                   }));
                 }}
               >
@@ -56,4 +57,15 @@ class TodoList extends Component {
   }
 }
 
-export default TodoList;
+TodoList.propTypes = {
+  getTodos: PropTypes.func.isRequired,
+  todo: PropTypes.object.isRequired
+};
+
+const mapStateToProps = state => ({
+  todo: state.todo
+});
+
+export default connect(mapStateToProps, { getTodos, deleteTodo, addTodo })(
+  TodoList
+);
