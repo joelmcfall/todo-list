@@ -13,9 +13,8 @@ class TodoList extends Component {
   render() {
     const { todo } = this.props.todo;
 
-    {
-      console.log(this.props.todo.todo.length);
-    }
+    console.log(this.props.todo.todo.length);
+
     return (
       <Container>
         <Button
